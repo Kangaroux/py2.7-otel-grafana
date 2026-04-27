@@ -1,0 +1,3 @@
+[submodule "opentelemetry-python-27"]
+	path = opentelemetry-python-27
+	url = git@github.com:drchrono/opentelemetry-python-27.git
