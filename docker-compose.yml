@@ -24,7 +24,7 @@ services:
       - run
       - /etc/alloy/config.alloy
       - --server.http.listen-addr=0.0.0.0:12345
-      - --stability.level=generally-available
+      - --stability.level=experimental
     depends_on:
       - tempo
 

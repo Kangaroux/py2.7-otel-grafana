@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+echo "Generating migrations..."
+python manage.py makemigrations api --noinput
+
 echo "Running migrations..."
 python manage.py migrate --noinput
 

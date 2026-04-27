@@ -4,9 +4,6 @@ import os
 import functools
 
 from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.resources import Resource
 
 _initialized = False
 
@@ -17,6 +14,11 @@ def setup_otel():
         return
     _initialized = True
 
+    # SDK imports are deferred to here to avoid a circular import between
+    # opentelemetry.sdk.trace and opentelemetry.metrics on Python 2.7.
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from opentelemetry.sdk.resources import Resource
     from instrumentation.exporter import OTLPJsonSpanExporter
     from instrumentation.db import patch_db_tracing
 
@@ -29,7 +31,7 @@ def setup_otel():
 
     trace.set_tracer_provider(provider)
     patch_db_tracing()
-    print("OpenTelemetry initialized — exporting to: " + endpoint)
+    print("OpenTelemetry initialized - exporting to: " + endpoint)
 
 
 def trace_function(func):
