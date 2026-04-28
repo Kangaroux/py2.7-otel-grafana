@@ -2,6 +2,24 @@
 
 OpenTelemetry tracing for a Python 2.7 Django application, with a Grafana observability stack.
 
+## Quick start
+
+Clone the repo and run a quick e2e test:
+```bash
+git clone --recurse-submodules git@github.com:drchrono/grafana-otel-py2.7.git
+cd grafana-otel-py2.7
+./e2e.sh
+```
+
+Access grafana at http://localhost:3000 (login is `admin`/`admin`)
+
+Generate some quick data with `./generate-spans.sh`
+
+- App: http://localhost:8000
+- Grafana: http://localhost:3000 (admin/admin)
+- Tempo: http://localhost:3200
+- Prometheus: http://localhost:9090
+
 ## Architecture
 
 ```
@@ -24,17 +42,6 @@ The OTel library is sourced from the `opentelemetry-python-27` git submodule (a 
 
 A `sitecustomize.py` polyfill layer provides the Python 3 stdlib features the SDK expects (`time.time_ns`, `functools.lru_cache`, `types.MappingProxyType`, etc.).
 
-## Quick start
-
-```bash
-git clone --recurse-submodules <repo-url>
-docker compose up --build
-```
-
-- App: http://localhost:8000
-- Grafana: http://localhost:3000 (admin/admin)
-- Tempo: http://localhost:3200
-- Prometheus: http://localhost:9090
 
 ### API endpoints
 
@@ -43,15 +50,6 @@ GET  /api/products/         -- list products (seeded on first boot)
 GET  /api/products/<id>/    -- get a single product
 GET  /api/orders/           -- list orders
 POST /api/orders/create/    -- create order  {"product_id": ..., "quantity": ..., "notes": "..."}
-```
-
-## End-to-end test
-
-The script below starts the stack, generates some traffic, waits for the
-observability pipeline to flush, then queries Tempo and Prometheus for results.
-
-```sh
-./e2e.sh
 ```
 
 ## Project structure
