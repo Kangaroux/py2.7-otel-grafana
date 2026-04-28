@@ -19,8 +19,10 @@ You can also access grafana at http://localhost:3000 (login is `admin`/`admin`).
 
 Check out [Drilldown > Traces](http://macos:3000/a/grafana-exploretraces-app/explore?from=now-30m&to=now&timezone=browser&var-ds=P214B5B846CF3925F&var-primarySignal=nestedSetParent%3C0&var-filters=&var-metric=rate&var-groupBy=All&var-spanListColumns=&var-latencyThreshold=&var-partialLatencyThreshold=&var-durationPercentiles=0.9&actionView=traceList) and [Drilldown > Metrics](http://macos:3000/a/grafana-metricsdrilldown-app/drilldown?from=now-1h&to=now&timezone=browser&var-metrics_filters=&var-filters=&var-labelsWingman=%28none%29&layout=grid&filters-rule=&filters-prefix=&filters-suffix=&search_txt=&var-metrics-reducer-sort-by=default&filters-recent=&var-ds=prometheus&var-other_metric_filters=).
 
-
 You can quickly generate some data with `./generate-spans.sh`, which runs the same API calls as e2e but without the extra fluff.
+
+![metrics screenshot](./ss_metrics.png)
+![traces screenshot](./ss_traces.png)
 
 - App: http://localhost:8000
 - Grafana: http://localhost:3000 (admin/admin)
