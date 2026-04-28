@@ -1,19 +1,30 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cleanup() { docker compose down -v; }
-trap cleanup EXIT
-
 echo "==> Building and starting the stack..."
-docker compose up --build -d
+docker compose up --quiet-build --build -d
 
 echo "==> Waiting for the app..."
 for i in $(seq 1 30); do
   curl -sf http://localhost:8000/ >/dev/null 2>&1 && break
   [ "$i" -eq 30 ] && { echo "App failed to start"; docker compose logs app; exit 1; }
-  sleep 2
+  sleep 1
 done
 echo "    App is ready."
+echo
+
+existing_orders=$(curl -s http://localhost:8000/api/orders | jq -r '.orders | length')
+if [[ "$existing_orders" -gt 0 ]]; then
+  echo "WARNING: there is existing order data. The e2e script needs a clean DB to run."
+  read -p "Run 'docker compose down -v'? [y/N] " ans
+  if [[ $ans != 'y' ]]; then
+    exit 0
+  fi
+  docker compose down -v
+  echo
+  echo "Please re-run $0"
+  exit 0
+fi
 
 do_curl() {
   echo ">>> curl $@"
