@@ -1,19 +1,26 @@
-# py2.7-otel-grafana
+# OpenTelemetry py2.7 Example
 
 OpenTelemetry tracing for a Python 2.7 Django application, with a Grafana observability stack.
 
+This relies on the otel library which was migrated to support python2.7: github.com/drchrono/opentelemetry-python-27
+
+Vibe coded with Opus 4.6
+
 ## Quick start
 
-Clone the repo and run a quick e2e test:
+Clone the repo and run a quick e2e test. This makes some API calls and prints the raw trace/metric data:
 ```bash
 git clone --recurse-submodules git@github.com:drchrono/grafana-otel-py2.7.git
 cd grafana-otel-py2.7
 ./e2e.sh
 ```
 
-Access grafana at http://localhost:3000 (login is `admin`/`admin`)
+You can also access grafana at http://localhost:3000 (login is `admin`/`admin`). Tempo and prometheus should be configured already.
 
-Generate some quick data with `./generate-spans.sh`
+Check out [Drilldown > Traces](http://macos:3000/a/grafana-exploretraces-app/explore?from=now-30m&to=now&timezone=browser&var-ds=P214B5B846CF3925F&var-primarySignal=nestedSetParent%3C0&var-filters=&var-metric=rate&var-groupBy=All&var-spanListColumns=&var-latencyThreshold=&var-partialLatencyThreshold=&var-durationPercentiles=0.9&actionView=traceList) and [Drilldown > Metrics](http://macos:3000/a/grafana-metricsdrilldown-app/drilldown?from=now-1h&to=now&timezone=browser&var-metrics_filters=&var-filters=&var-labelsWingman=%28none%29&layout=grid&filters-rule=&filters-prefix=&filters-suffix=&search_txt=&var-metrics-reducer-sort-by=default&filters-recent=&var-ds=prometheus&var-other_metric_filters=).
+
+
+You can quickly generate some data with `./generate-spans.sh`, which runs the same API calls as e2e but without the extra fluff.
 
 - App: http://localhost:8000
 - Grafana: http://localhost:3000 (admin/admin)
