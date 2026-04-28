@@ -12,13 +12,9 @@ WORKDIR /app
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install OpenTelemetry from the local submodule by merging the src/ trees.
-# pip wheel installs can't merge Python 2.7 namespace packages across multiple
-# packages, so we copy the source directly and add it to PYTHONPATH.
-COPY opentelemetry-python-27/opentelemetry-api/src/opentelemetry /opt/otel/opentelemetry
-COPY opentelemetry-python-27/opentelemetry-semantic-conventions/src/opentelemetry /opt/otel/opentelemetry
-COPY opentelemetry-python-27/opentelemetry-sdk/src/opentelemetry /opt/otel/opentelemetry
-ENV PYTHONPATH="/opt/otel"
+# Install OpenTelemetry from the local submodule as a single monolithic package.
+COPY opentelemetry-python-27 /tmp/otel
+RUN pip install --no-cache-dir /tmp/otel && rm -rf /tmp/otel
 
 # Install sitecustomize.py to patch stdlib gaps (e.g. functools.lru_cache)
 # before any user code runs. Must live in site-packages for auto-loading.
