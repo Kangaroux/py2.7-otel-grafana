@@ -20,7 +20,7 @@ if [[ $existing_orders != 0 ]]; then
   if [[ $ans != 'y' ]]; then
     exit 0
   fi
-  docker compose down -v
+  docker compose down -v app
   echo
   echo "Please re-run $0"
   exit 0
