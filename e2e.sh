@@ -13,8 +13,8 @@ done
 echo "    App is ready."
 echo
 
-existing_orders=$(curl -s http://localhost:8000/api/orders | jq -r '.orders | length')
-if [[ "$existing_orders" -gt 0 ]]; then
+existing_orders=$(curl -s http://localhost:8000/api/orders/ | jq -r '.orders | length')
+if [[ $existing_orders != 0 ]]; then
   echo "WARNING: there is existing order data. The e2e script needs a clean DB to run."
   read -p "Run 'docker compose down -v'? [y/N] " ans
   if [[ $ans != 'y' ]]; then
