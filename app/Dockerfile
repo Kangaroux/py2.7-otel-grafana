@@ -18,9 +18,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY opentelemetry-python-27/opentelemetry-api/src/opentelemetry /opt/otel/opentelemetry
 COPY opentelemetry-python-27/opentelemetry-semantic-conventions/src/opentelemetry /opt/otel/opentelemetry
 COPY opentelemetry-python-27/opentelemetry-sdk/src/opentelemetry /opt/otel/opentelemetry
-# Python 2.7 requires __init__.py in every package directory
-RUN find /opt/otel -type d ! -name '__pycache__' -exec sh -c \
-    '[ ! -f "$1/__init__.py" ] && touch "$1/__init__.py"' _ {} \;
 ENV PYTHONPATH="/opt/otel"
 
 # Install sitecustomize.py to patch stdlib gaps (e.g. functools.lru_cache)
