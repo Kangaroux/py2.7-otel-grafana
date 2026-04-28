@@ -15,20 +15,26 @@ for i in $(seq 1 30); do
 done
 echo "    App is ready."
 
+do_curl() {
+  echo ">>> curl $@"
+  curl "$@" | jq .
+  echo
+}
+
 echo "==> Generating API traffic..."
-curl -s http://localhost:8000/api/products/
-curl -s http://localhost:8000/api/products/1/
-curl -s -X POST http://localhost:8000/api/orders/create/ \
+echo
+do_curl -s http://localhost:8000/api/products/
+do_curl -s -X POST http://localhost:8000/api/orders/create/ \
   -H "Content-Type: application/json" \
   -d '{"product_id": 1, "quantity": 2, "notes": "e2e test"}'
-curl -s -X POST http://localhost:8000/api/orders/create/ \
+do_curl -s -X POST http://localhost:8000/api/orders/create/ \
   -H "Content-Type: application/json" \
   -d '{"product_id": 2, "quantity": 1}'
-curl -s http://localhost:8000/api/orders/
-echo
+do_curl -s http://localhost:8000/api/orders/
 
-echo "==> Waiting 30s for traces to flush and metrics to be scraped..."
-sleep 30
+waittime=30
+echo "==> Waiting ${waittime}s for traces to flush and metrics to be scraped..."
+sleep $waittime
 
 echo "==> Tempo traces:"
 curl -s 'http://localhost:3200/api/search?limit=5' | jq .
