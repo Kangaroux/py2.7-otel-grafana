@@ -31,11 +31,10 @@ echo "==> Waiting 30s for traces to flush and metrics to be scraped..."
 sleep 30
 
 echo "==> Tempo traces:"
-curl -s 'http://localhost:3200/api/search?tags=service.name%3Ddjango-otel-poc' | python3 -m json.tool
+curl -s 'http://localhost:3200/api/search?limit=5' | jq .
 
 echo "==> Prometheus span metrics:"
-curl -s 'http://localhost:9090/api/v1/query?query=traces_spanmetrics_calls_total{service_name="django-otel-poc"}' \
-  | python3 -m json.tool
+curl -s 'http://localhost:9090/api/v1/query?query=traces_spanmetrics_calls_total' | jq .
 
 echo "==> Done."
 

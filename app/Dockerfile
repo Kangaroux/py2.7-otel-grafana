@@ -12,15 +12,16 @@ WORKDIR /app
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install OpenTelemetry from the local submodule (api -> semconv -> sdk)
-COPY opentelemetry-python-27/opentelemetry-api /tmp/otel/opentelemetry-api
-COPY opentelemetry-python-27/opentelemetry-semantic-conventions /tmp/otel/opentelemetry-semantic-conventions
-COPY opentelemetry-python-27/opentelemetry-sdk /tmp/otel/opentelemetry-sdk
-RUN pip install --no-cache-dir \
-    /tmp/otel/opentelemetry-api \
-    /tmp/otel/opentelemetry-semantic-conventions \
-    /tmp/otel/opentelemetry-sdk \
-    && rm -rf /tmp/otel
+# Install OpenTelemetry from the local submodule by merging the src/ trees.
+# pip wheel installs can't merge Python 2.7 namespace packages across multiple
+# packages, so we copy the source directly and add it to PYTHONPATH.
+COPY opentelemetry-python-27/opentelemetry-api/src/opentelemetry /opt/otel/opentelemetry
+COPY opentelemetry-python-27/opentelemetry-semantic-conventions/src/opentelemetry /opt/otel/opentelemetry
+COPY opentelemetry-python-27/opentelemetry-sdk/src/opentelemetry /opt/otel/opentelemetry
+# Python 2.7 requires __init__.py in every package directory
+RUN find /opt/otel -type d ! -name '__pycache__' -exec sh -c \
+    '[ ! -f "$1/__init__.py" ] && touch "$1/__init__.py"' _ {} \;
+ENV PYTHONPATH="/opt/otel"
 
 # Install sitecustomize.py to patch stdlib gaps (e.g. functools.lru_cache)
 # before any user code runs. Must live in site-packages for auto-loading.
