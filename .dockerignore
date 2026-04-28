@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+.gitmodules
+
+# Submodule directories not needed during build
+opentelemetry-python-27/.git
+opentelemetry-python-27/.github
+opentelemetry-python-27/docs
+opentelemetry-python-27/tests
+opentelemetry-python-27/test_refactoring
+opentelemetry-python-27/exporter
+opentelemetry-python-27/propagator
+opentelemetry-python-27/shim
+opentelemetry-python-27/codegen
+opentelemetry-python-27/scripts
+opentelemetry-python-27/opentelemetry-proto
+opentelemetry-python-27/opentelemetry-proto-json
+opentelemetry-python-27/*.md
+opentelemetry-python-27/*.toml
+opentelemetry-python-27/*.ini
+opentelemetry-python-27/Dockerfile.test
+
+# IDE / OS
+.idea
+.vscode
+.DS_Store
+*.swp
+
+# Python artifacts
+*.pyc
+__pycache__
+*.egg-info
+
+# Docker data
+tempo-data
